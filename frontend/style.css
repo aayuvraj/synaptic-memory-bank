@@ -504,20 +504,20 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .btn-primary {
-  color: var(--color-bg);
-  background: var(--color-primary);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.25);
+  color: #080b10;
+  background: linear-gradient(135deg, #00b4d8, #0090b3);
+  box-shadow: 0 0 18px rgba(0, 180, 216, 0.28), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-dim);
-  box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+  background: linear-gradient(135deg, #00c8f0, #00a0c8);
+  box-shadow: 0 0 28px rgba(0, 180, 216, 0.42);
   transform: translateY(-1px);
 }
 
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 180, 216, 0.2);
 }
 
 .btn-primary.loading {

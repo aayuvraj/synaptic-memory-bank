@@ -206,10 +206,10 @@ function updateBadge(v) {
   if (val >= 0.8) {
     badge.textContent = 'Critical';
     badge.className = 'importance-badge critical';
-  } else if (val >= 0.5) {
+  } else if (val >= 0.6) {
     badge.textContent = 'High';
     badge.className = 'importance-badge high';
-  } else if (val >= 0.25) {
+  } else if (val >= 0.3) {
     badge.textContent = 'Moderate';
     badge.className = 'importance-badge moderate';
   } else {
