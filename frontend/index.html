@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Synaptic Memory Bank</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Neural Canvas Background -->
+  <canvas id="neural-canvas"></canvas>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-label="Synaptic Memory Bank logo">
+          <circle cx="18" cy="18" r="5" fill="url(#logoGrad)" />
+          <circle cx="6"  cy="10" r="2.5" fill="#4f98a3" opacity="0.8"/>
+          <circle cx="6"  cy="26" r="2.5" fill="#4f98a3" opacity="0.8"/>
+          <circle cx="30" cy="10" r="2.5" fill="#a86fdf" opacity="0.8"/>
+          <circle cx="30" cy="26" r="2.5" fill="#a86fdf" opacity="0.8"/>
+          <circle cx="18" cy="4"  r="2.5" fill="#5591c7" opacity="0.8"/>
+          <circle cx="18" cy="32" r="2.5" fill="#5591c7" opacity="0.8"/>
+          <line x1="18" y1="13" x2="6"  y2="10" stroke="#4f98a3" stroke-width="1" opacity="0.5"/>
+          <line x1="18" y1="13" x2="6"  y2="26" stroke="#4f98a3" stroke-width="1" opacity="0.5"/>
+          <line x1="18" y1="13" x2="30" y2="10" stroke="#a86fdf" stroke-width="1" opacity="0.5"/>
+          <line x1="18" y1="13" x2="30" y2="26" stroke="#a86fdf" stroke-width="1" opacity="0.5"/>
+          <line x1="18" y1="13" x2="18" y2="4"  stroke="#5591c7" stroke-width="1" opacity="0.5"/>
+          <line x1="18" y1="23" x2="18" y2="32" stroke="#5591c7" stroke-width="1" opacity="0.5"/>
+          <defs>
+            <radialGradient id="logoGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#a86fdf"/>
+              <stop offset="100%" stop-color="#4f98a3"/>
+            </radialGradient>
+          </defs>
+        </svg>
+        <span class="logo-text">Synaptic<span class="logo-accent">MB</span></span>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-view="ingest">Ingest</button>
+        <button class="nav-btn" data-view="retrieve">Retrieve</button>
+        <button class="nav-btn" data-view="memories">Memories</button>
+        <button class="nav-btn" data-view="stats">Stats</button>
+      </nav>
+
+      <div class="header-actions">
+        <div class="api-status" id="api-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Connecting…</span>
+        </div>
+        <input class="user-input" id="user-id-input" placeholder="user_id" value="user_123" title="Active user ID" />
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- ─── INGEST VIEW ─── -->
+    <section class="view active" id="view-ingest">
+      <div class="view-header">
+        <h1 class="view-title">Consolidate Memory</h1>
+        <p class="view-subtitle">Store episodic knowledge with temporal and importance metadata.</p>
+      </div>
+
+      <div class="card ingest-card">
+        <div class="card-body">
+          <div class="field">
+            <label class="label" for="memory-text">Memory Content</label>
+            <textarea id="memory-text" class="textarea" rows="4"
+              placeholder="Describe a fact, event, or piece of knowledge to remember…"></textarea>
+          </div>
+
+          <div class="field">
+            <label class="label" for="importance-slider">
+              Importance
+              <span class="importance-value" id="importance-display">0.5</span>
+              <span class="importance-badge" id="importance-badge">Moderate</span>
+            </label>
+            <div class="slider-track">
+              <input type="range" id="importance-slider" min="0" max="1" step="0.05" value="0.5" />
+              <div class="slider-labels">
+                <span>Trivial</span>
+                <span>Moderate</span>
+                <span>Critical</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-tags">
+            <span class="tag-label">Quick presets:</span>
+            <button class="tag" data-text="The user is highly allergic to peanuts and dairy." data-imp="1.0">🚨 Critical allergy</button>
+            <button class="tag" data-text="The user prefers dark mode in all applications." data-imp="0.4">🎨 UI preference</button>
+            <button class="tag" data-text="The user's birthday is on March 15th." data-imp="0.7">🎂 Birthday</button>
+            <button class="tag" data-text="The user mentioned they enjoy morning coffee." data-imp="0.2">☕ Coffee habit</button>
+          </div>
+
+          <button class="btn btn-primary" id="ingest-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            Consolidate Memory
+          </button>
+        </div>
+      </div>
+
+      <!-- Response -->
+      <div class="response-area" id="ingest-response" hidden>
+        <div class="response-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Memory Consolidated
+        </div>
+        <pre class="response-code" id="ingest-response-body"></pre>
+      </div>
+    </section>
+
+    <!-- ─── RETRIEVE VIEW ─── -->
+    <section class="view" id="view-retrieve">
+      <div class="view-header">
+        <h1 class="view-title">Synaptic Retrieval</h1>
+        <p class="view-subtitle">Query memories using the three-signal brain-inspired algorithm: Relevance · Recency · Importance.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="field">
+            <label class="label" for="query-text">Query</label>
+            <div class="input-group">
+              <input id="query-text" class="input" type="text"
+                placeholder="What dietary restrictions does this user have?" />
+              <div class="top-k-field">
+                <label class="label" for="top-k">Top K</label>
+                <input id="top-k" class="input input-sm" type="number" min="1" max="20" value="5" />
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="retrieve-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Search Memory
+          </button>
+        </div>
+      </div>
+
+      <div id="retrieve-results" hidden>
+        <div class="results-header">
+          <span id="results-count" class="results-count"></span>
+          <div class="legend">
+            <span class="legend-dot relevance"></span>Relevance
+            <span class="legend-dot recency"></span>Recency
+            <span class="legend-dot importance"></span>Importance
+          </div>
+        </div>
+        <div class="memory-list" id="memory-cards"></div>
+      </div>
+    </section>
+
+    <!-- ─── MEMORIES VIEW ─── -->
+    <section class="view" id="view-memories">
+      <div class="view-header">
+        <h1 class="view-title">Memory Store</h1>
+        <p class="view-subtitle">All stored episodic records for the active user.</p>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn btn-secondary" id="refresh-memories-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="memory-grid" id="all-memories-list">
+        <div class="empty-state">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+          <p>No memories stored yet. Ingest your first memory.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── STATS VIEW ─── -->
+    <section class="view" id="view-stats">
+      <div class="view-header">
+        <h1 class="view-title">Memory Analytics</h1>
+        <p class="view-subtitle">Cognitive load and synaptic weight distribution.</p>
+      </div>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🧠</div>
+          <div class="stat-value" id="stat-total">—</div>
+          <div class="stat-label">Total Memories</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🚨</div>
+          <div class="stat-value" id="stat-critical">—</div>
+          <div class="stat-label">Critical Memories</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value" id="stat-importance">—</div>
+          <div class="stat-label">Avg Importance</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🕐</div>
+          <div class="stat-value" id="stat-recency">—</div>
+          <div class="stat-label">Avg Recency Score</div>
+        </div>
+      </div>
+
+      <div class="card scoring-card">
+        <div class="card-header">Three-Signal Scoring Breakdown</div>
+        <div class="card-body">
+          <div class="signal-bar">
+            <div class="signal-label">
+              <span>α Relevance</span>
+              <span class="signal-weight">50%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill relevance" style="width:50%"></div></div>
+            <p class="signal-desc">Cosine similarity between query and memory embeddings using all-MiniLM-L6-v2.</p>
+          </div>
+          <div class="signal-bar">
+            <div class="signal-label">
+              <span>β Recency</span>
+              <span class="signal-weight">30%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill recency" style="width:30%"></div></div>
+            <p class="signal-desc">Exponential decay R(t) = e<sup>−λd</sup> where λ=0.05 and d is age in days. Half-life ≈ 14 days.</p>
+          </div>
+          <div class="signal-bar">
+            <div class="signal-label">
+              <span>γ Importance</span>
+              <span class="signal-weight">20%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill importance" style="width:20%"></div></div>
+            <p class="signal-desc">User-assigned criticality score (0.0 trivial → 1.0 critical) stored at ingest time.</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" id="load-stats-btn" style="margin-top: var(--space-4)">
+        Refresh Stats
+      </button>
+    </section>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
